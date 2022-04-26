@@ -49,15 +49,15 @@ if __name__ == '__main__':
     if not os.path.isdir('./logs'):
         os.makedirs('./logs')
     with open(filename, 'w') as f: 
-        f.write("Benign, Poison\n")
-        for _ in range(args['N_m']):
+        f.write("N, Benign, Poison\n")
+        for n in range(args['N_m']):
             model = Model(gpu=use_gpu)
             trainset = SmoothedDataset(poisoned_train, args['sigma'])
             trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True)
             train_model(model, trainloader, lr=LR, epoch_num=N_EPOCH, dldp_setting=(args['dldp_sigma'],args['dldp_gnorm']), verbose=False)
-            save_path = PREFIX+'/smoothed_%d.model'%_
+            save_path = PREFIX+'/smoothed_%d.model'%n
             torch.save(model.state_dict(), save_path)
             acc_benign = eval_model(model, testloader_benign)
             acc_poison = eval_model(model, testloader_poison)
-            print ("Benign/Poison ACC %.4f/%.4f, saved to %s @ %s"%(acc_benign, acc_poison, save_path, datetime.now()))
-            f.write(f"{acc_benign}, {acc_poison}\n")
+            print ("%d - Benign/Poison ACC %.4f/%.4f, saved to %s @ %s"%(n, acc_benign, acc_poison, save_path, datetime.now()))
+            f.write(f"{n}, {acc_benign}, {acc_poison}\n")
