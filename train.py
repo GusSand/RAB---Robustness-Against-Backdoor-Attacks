@@ -45,7 +45,7 @@ if __name__ == '__main__':
     if not os.path.isdir(PREFIX):
         os.makedirs(PREFIX)
 
-    filename = './logs/%s-%s-delta%.4f-poison_r%.4f.csv'%(args['dataset'], args['atk_method'], args['delta'], args['poison_r'])
+    filename = './logs/%s-%s-delta%.4f-poison_r%.4f-n_m%d.csv'%(args['dataset'], args['atk_method'], args['delta'], args['poison_r'], args['N_m'])
     if not os.path.isdir('./logs'):
         os.makedirs('./logs')
     with open(filename, 'w') as f: 
