@@ -38,14 +38,19 @@ if __name__ == '__main__':
     binary_str = 'binary'
     if args['pair_id'] != 0:
         binary_str = binary_str+'(%d)'%(args['pair_id']+1)
-    PREFIX = './saved_model/%s%s-%s(%.4f)-pr%.4f-sigma%.4f'%(args['dataset'], binary_str, args['atk_method'], args['delta'], args['poison_r'], args['sigma'])
+    PREFIX = './saved_model/%s%s-%s(%.4f)-pr%.4f-sigma%.4f-N_m%d'%(args['dataset'], binary_str, args['atk_method'], args['delta'], args['poison_r'], args['sigma'], args['N_m'])
     if args['dldp_sigma'] != 0:
-        PREFIX = PREFIX+'-dldp(%s,%s)'%(args['dldp_sigma'], args['dldp_gnorm'])
+        dlpargs = '-dldp(%s,%s)'%(args['dldp_sigma'], args['dldp_gnorm'])
+        PREFIX = PREFIX+ dlpargs
 
     if not os.path.isdir(PREFIX):
         os.makedirs(PREFIX)
 
-    filename = './logs/%s-%s-delta%.4f-poison_r%.4f-n_m%d.csv'%(args['dataset'], args['atk_method'], args['delta'], args['poison_r'], args['N_m'])
+    filename = './logs/%s-%s-delta%.4f-sigma%.4f-poison_r%.4f-n_m%d.csv'%(args['dataset'], args['atk_method'], args['delta'], args['sigma'],args['poison_r'], args['N_m'])
+    if args['dldp_sigma'] != 0:
+        dlpargs = '-dldp(%s,%s)'%(args['dldp_sigma'], args['dldp_gnorm'])
+        filename = filename + dlpargs
+
     if not os.path.isdir('./logs'):
         os.makedirs('./logs')
     with open(filename, 'w') as f: 
@@ -54,7 +59,7 @@ if __name__ == '__main__':
             model = Model(gpu=use_gpu)
             trainset = SmoothedDataset(poisoned_train, args['sigma'])
             trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True)
-            train_model(model, trainloader, lr=LR, epoch_num=N_EPOCH, dldp_setting=(args['dldp_sigma'],args['dldp_gnorm']), verbose=False)
+            train_model(model, trainloader, lr=LR, epoch_num=N_EPOCH, dldp_setting=(args['dldp_sigma'],args['dldp_gnorm']), verbose=True)
             save_path = PREFIX+'/smoothed_%d.model'%n
             torch.save(model.state_dict(), save_path)
             acc_benign = eval_model(model, testloader_benign)

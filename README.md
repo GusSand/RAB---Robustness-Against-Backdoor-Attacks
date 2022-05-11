@@ -22,9 +22,31 @@ The MNIST and CIFAR-10 datasets will be downloaded at running time. The spam cla
 
 Train deep neural networks with smoothing noise scale 1.0 on a Trojaned CIFAR-10 dataset, in which 2% data cases are poisoned using four-pixel patterns with perturbation norm 0.1:
 
+
+2%
 ```
-python train.py --sigma 1.0 --dataset cifar --atk_method fourpixel --poison_r 0.02 --delta 0.1
+
+python train.py --sigma 1.0 --dataset cifar --atk_method fourpixel --poison_r 0.02 --delta 0.1 --N_m=1000
+python train.py --sigma 1.0 --dataset cifar --atk_method fourpixel --poison_r 0.02 --delta 0.1 --N_m=10
+python train.py --sigma 1.0 --atk_method fourpixel --poison_r 0.02 --delta 0.1 --N_m=10
 ```
+
+5%
+```
+
+python train.py --sigma 1.0 --dataset cifar --atk_method fourpixel --poison_r 0.05 --delta 0.1 --N_m=1000
+python train.py --sigma 1.0 --dataset cifar --atk_method fourpixel --poison_r 0.05 --delta 0.1 --N_m=10
+
+```
+
+10%
+```
+
+python train.py --sigma 1.0 --dataset cifar --atk_method fourpixel --poison_r 0.1 --delta 0.1 --N_m=1000
+python train.py --sigma 1.0 --dataset cifar --atk_method fourpixel --poison_r 0.1 --delta 0.1 --N_m=10
+
+
+
 
 Evaluate:
 
