@@ -59,7 +59,7 @@ if __name__ == '__main__':
             model = Model(gpu=use_gpu)
             trainset = SmoothedDataset(poisoned_train, args['sigma'])
             trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True)
-            train_model(model, trainloader, lr=LR, epoch_num=N_EPOCH, dldp_setting=(args['dldp_sigma'],args['dldp_gnorm']), verbose=True)
+            train_model(model, trainloader, lr=LR, epoch_num=N_EPOCH, dldp_setting=(args['dldp_sigma'],args['dldp_gnorm']), verbose=False)
             save_path = PREFIX+'/smoothed_%d.model'%n
             torch.save(model.state_dict(), save_path)
             acc_benign = eval_model(model, testloader_benign)
